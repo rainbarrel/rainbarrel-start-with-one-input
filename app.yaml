@@ -1,0 +1,20 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+
+- url: /
+  static_files: index.html
+  upload: index.html
+
+- url: /assets
+  static_dir: assets
+
+skip_files:
+- ^.git/.*
+- ^node_modules/(.*/)?
+# this one is to make dev_appserver.py ignore file-watching
+- .*node_modules
+- ^js/(.*/)?
+- ^less/(.*/)?

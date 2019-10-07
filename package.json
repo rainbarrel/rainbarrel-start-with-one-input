@@ -1,0 +1,71 @@
+{
+  "name": "cl-template-browserify",
+  "version": "0.0.0",
+  "description": "",
+  "main": "js/index.js",
+  "gcloud": {
+    "id": "PROJECT_ID",
+    "version": "1",
+    "devPort": 8080,
+    "devAdminPort": 8000
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "plugins": [
+            [
+              "@babel/plugin-transform-runtime",
+              {
+                "regenerator": true
+              }
+            ]
+          ],
+          "presets": [
+            [
+              "@babel/preset-env",
+              {
+                "targets": {
+                  "browsers": [
+                    "last 2 versions"
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
+  "scripts": {
+    "deploy": "npm run build && gcloud app deploy --project $npm_package_gcloud_id --version $npm_package_gcloud_version --no-promote",
+    "dev_appserver": "dev_appserver.py app.yaml --port=$npm_package_gcloud_devPort --admin_port=$npm_package_gcloud_devAdminPort",
+    "browse": "gcloud app browse --project $npm_package_gcloud_id",
+    "build": "npm run less && browserify js/index.js -o assets/bundle.js",
+    "less": "lessc less/style.less assets/style.css",
+    "dev": "npm run less && concurrently \"npm run watchify\" \"autoless less/ assets/\" \"npm run dev_appserver\"",
+    "start": "npm run dev",
+    "watchify": "watchify js/index.js --debug -o assets/bundle.js --verbose"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-transform-regenerator": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/runtime": "^7.3.4",
+    "@tensorflow-models/speech-commands": "^0.3.9",
+    "@tensorflow/tfjs": "^1.2.9",
+    "autoless": "^0.1.7",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "concurrently": "^4.1.0",
+    "firebase": "^6.6.0",
+    "less": "^3.9.0",
+    "watchify": "^3.11.1"
+  },
+  "devDependencies": {}
+}
